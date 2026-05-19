@@ -1,0 +1,17 @@
+{
+  "short_name": "CommHub",
+  "name": "Global Communication Hub",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/5968/5968756.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "https://YOUR-ORIGINAL-CHAT-SITE-URL.render.com",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "display": "standalone",
+  "orientation": "portrait"
+}
