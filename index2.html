@@ -1,36 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download Hub</title>
-    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body style="background:#0f172a; color:#fff; font-family:sans-serif; text-align:center; padding-top:100px;">
 
     <h1>Communication Hub</h1>
-    <button id="btn" style="display:none; padding:15px; background:#10b981; color:#fff; border:none; border-radius:5px; font-size:16px;">📥 Download App</button>
-    <p id="txt">Detecting device compatibility...</p>
+    <button id="btn" style="display:none; padding:15px; background:#10b981; color:#fff; border:none; border-radius:5px; font-size:16px; cursor:pointer;">📥 Download App</button>
+    <p id="txt">Detecting compatibility...</p>
 
     <script>
-        let promptEvent;
-        
-        // Show button when device is ready to download
+        let deferPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            promptEvent = e;
+            deferPrompt = e;
             document.getElementById('btn').style.display = 'inline-block';
             document.getElementById('txt').style.display = 'none';
         });
 
-        // Click action to install
         document.getElementById('btn').addEventListener('click', () => {
-            if(promptEvent) promptEvent.prompt();
+            if(deferPrompt) deferPrompt.prompt();
         });
 
-        // Register the required background script
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js');
+            navigator.serviceWorker.register('sw.js');
         }
     </script>
 </body>
