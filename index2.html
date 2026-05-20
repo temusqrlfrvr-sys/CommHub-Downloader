@@ -3,103 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Install Global Communication Hub</title>
+    <title>Download Hub</title>
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#1e293b">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #0f172a;
-            color: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-        .download-card {
-            background-color: #1e293b;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            border: 1px solid #334155;
-            max-width: 400px;
-            width: 100%;
-        }
-        h1 { color: #38bdf8; margin-top: 0; font-size: 24px; }
-        p { color: #94a3b8; font-size: 15px; line-height: 1.6; margin-bottom: 30px; }
-        
-        /* The main PWA installation trigger button */
-        #install-btn {
-            background-color: #10b981;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            padding: 14px 28px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            display: none; /* Stays hidden until browser confirms PWA installation support */
-        }
-        #install-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        
-        .fallback-text { color: #f59e0b; font-style: italic; font-size: 14px; margin-top: 15px; }
-    </style>
 </head>
-<body>
+<body style="background:#0f172a; color:#fff; font-family:sans-serif; text-align:center; padding-top:100px;">
 
-    <div class="download-card">
-        <h1>Communication Hub</h1>
-        <p>Install the secure global chat and voice calling platform directly onto your Android, iOS, or Desktop device.</p>
-        
-        <button id="install-btn">📥 Download & Install App</button>
-        
-        <div id="fallback-info" class="fallback-text">
-            Detecting device compatibility...
-        </div>
-    </div>
+    <h1>Communication Hub</h1>
+    <button id="btn" style="display:none; padding:15px; background:#10b981; color:#fff; border:none; border-radius:5px; font-size:16px;">📥 Download App</button>
+    <p id="txt">Detecting device compatibility...</p>
 
     <script>
-        let deferredPrompt;
-        const installBtn = document.getElementById('install-btn');
-        const fallbackInfo = document.getElementById('fallback-info');
-
-        // Listen for the browser's built-in PWA installation prompt request
+        let promptEvent;
+        
+        // Show button when device is ready to download
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            deferredPrompt = e;
-            // Reveal the native download button to the user
-            installBtn.style.display = 'block';
-            fallbackInfo.style.display = 'none';
+            promptEvent = e;
+            document.getElementById('btn').style.display = 'inline-block';
+            document.getElementById('txt').style.display = 'none';
         });
 
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User installation decision outcome response: ${outcome}`);
-            deferredPrompt = null;
-            installBtn.style.display = 'none';
+        // Click action to install
+        document.getElementById('btn').addEventListener('click', () => {
+            if(promptEvent) promptEvent.prompt();
         });
 
-        // Track when the application successfully installs
-        window.addEventListener('appinstalled', () => {
-            fallbackInfo.innerText = "🎉 Application installed successfully!";
-            fallbackInfo.style.display = 'block';
-            installBtn.style.display = 'none';
-        });
-
-        // Register the background service worker loop execution threads
+        // Register the required background script
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Downloader Service Worker registered:', reg.scope))
-                    .catch(err => console.error('Service Worker registration failure:', err));
-            });
+            navigator.serviceWorker.register('./sw.js');
         }
     </script>
 </body>

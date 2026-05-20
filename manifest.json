@@ -1,0 +1,7 @@
+{
+  "short_name": "CommHub",
+  "name": "Communication Hub",
+  "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/5968/5968756.png", "sizes": "512x512", "type": "image/png"}],
+  "start_url": "./index.html",
+  "display": "standalone"
+}
